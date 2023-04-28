@@ -5,12 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const VIEWS = path.join(__dirname, 'public')
 const mongoose = require('mongoose');
-const User = require("./models/model");
+const { addUser, getUser } = require("./models/model");
 require("./conn")
-const fetchRouter = require('./routes/fetch_route');
-// const cors = require('cors');
 
-app.use('/', fetchRouter);
 //to render static files
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(cors)
@@ -33,24 +30,31 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
+    // var questions;
     const { username, email, password } = req.body;
     console.log( username, password, email );
 
-    const user = new User({
-    name: `${username}`,
-    //   email: `${email}`,
-    password: `${password}`,
-    // age: 30
+    const user = new addUser({
+        name: `${username}`,
+        //email: `${email}`,
+        password: `${password}`,
+        // age: 30
     });
 
     user.save().then(() => {
-    console.log('User created');
-    }).catch((err) => {
-    console.log('Error creating user:', err);
-
+        console.log('User created');
+        }).catch((err) => {
+        console.log('Error creating user:', err);
     });
 
-   
+    
+    addUser.find().then( data => { 
+        //  console.log(data);
+     
+     }).catch(() => {
+        console.log('cannot fetch info')
+     })
+
     res.redirect('/quiz/quiz.html'); 
 
 })
