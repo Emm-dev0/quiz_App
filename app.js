@@ -7,10 +7,10 @@ const VIEWS = path.join(__dirname, 'public')
 const mongoose = require('mongoose');
 const { addUser, getUser } = require("./models/model");
 require("./conn")
+var questionss;
 
 //to render static files
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(cors)
 
 //for body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -30,11 +30,13 @@ app.get('/signup', (req, res) => {
 });
 
 app.post('/signup', (req, res) => {
-    // var questions;
+ 
+    //gets the userdetails from the form
     const { username, email, password } = req.body;
     console.log( username, password, email );
 
-    const user = new addUser({
+    //assigns the userdetails  to the set schema and stores it in the database 
+    const user = new getUser({
         name: `${username}`,
         //email: `${email}`,
         password: `${password}`,
@@ -47,17 +49,28 @@ app.post('/signup', (req, res) => {
         console.log('Error creating user:', err);
     });
 
-    
-    addUser.find().then( data => { 
-        //  console.log(data);
-     
-     }).catch(() => {
-        console.log('cannot fetch info')
-     })
+    //retrives the data from the database
+    async function getDocs() {
+        try {
+           const docs = await getUser.find({});
+           questionss = docs;
+           console.log(questionss);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    getDocs();
+
+
+    app.get('/question-array', (req, res) => {
+        res.send(questionss);
+    })
 
     res.redirect('/quiz/quiz.html'); 
 
 })
+
 
 app.listen(port);
 console.log("app started on port"  +" "+ `${port}`)

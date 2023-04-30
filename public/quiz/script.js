@@ -1,5 +1,5 @@
+
 //References
-// import myJson from './index.json' assert {type: 'json'} ;
 let timeLeft = document.querySelector(".time-left");
 let quizContainer = document.getElementById("container");
 let nextBtn = document.getElementById("next-button");
@@ -14,7 +14,21 @@ let questionCount;
 let scoreCount = 0;
 let count = 11;
 let countdown;
+var questionss;
 
+
+// async function getQuestions() {
+//   try {
+//         await fetch('/question-array')
+//     .then(response => response.json())
+//     .then(data => {
+//       console.log(data);
+//     });
+
+//  } catch (err) {}
+// }
+
+// getQuestions();
 //Questions and Options array
 
 const quizArray = [
