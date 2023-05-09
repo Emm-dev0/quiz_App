@@ -1,4 +1,20 @@
-// const { response } = require("express");
+var quest;
+var quizArray;
+
+async function getQuestions() {
+  try {
+    await fetch('http://localhost:5000/quizQuestions')
+    .then(response => response.json())
+    .then(data => {
+     quest = data;
+      console.log(quest);
+    });
+  } catch (e) {};
+
+}
+
+getQuestions();
+
 
 //References
 let timeLeft = document.querySelector(".time-left");
@@ -15,23 +31,7 @@ let questionCount;
 let scoreCount = 0;
 let count = 11;
 let countdown;
-var quest;
-var quizArray;
 
-
-async function getQuestions() {
-  try {
-    await fetch('http://localhost:5000/quizQuestions')
-    .then(response => response.json())
-    .then(data => {
-     quest = data;
-      // console.log(quest);
-    });
-  } catch (e) {};
-
-}
-
-getQuestions();
 
 setTimeout(() => {
   quizArray = quest;
