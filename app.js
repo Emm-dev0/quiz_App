@@ -5,9 +5,9 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const VIEWS = path.join(__dirname, 'public')
 const mongoose = require('mongoose');
-const { addUser, getUser } = require("./models/model");
+const { getUser, questions } = require("./models/model");
 require("./conn")
-var questionss;
+var quizQuestions;
 
 //to render static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -53,8 +53,7 @@ app.post('/signup', (req, res) => {
     async function getDocs() {
         try {
            const docs = await getUser.find({});
-           questionss = docs;
-           console.log(questionss);
+           console.log(docs);
         } catch (err) {
             console.error(err);
         }
@@ -62,15 +61,28 @@ app.post('/signup', (req, res) => {
 
     getDocs();
 
-
-    app.get('/question-array', (req, res) => {
-        res.send(questionss);
-    })
-
     res.redirect('/quiz/quiz.html'); 
 
-})
+});
 
+//fetches the question from the database ans hosts it
+app.get("/quizQuestions", async (req, res) => {
+    async function getQuestions() {
+        try {
+           const question = await questions.find({});
+            quizQuestions = question;
+        //    console.log(question);
+           
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    getQuestions();
+    console.log( quizQuestions );
+
+    res.send(await quizQuestions);
+});
 
 app.listen(port);
 console.log("app started on port"  +" "+ `${port}`)

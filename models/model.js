@@ -1,13 +1,5 @@
 const mongoose = require('mongoose');
 
-const adduserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  // email: { type: String, required: true },
-  password: { type: String, required: true },
-  // age: { type: Number },
-  createdAt: { type: Date, default: Date.now }
-});
-
 const getuserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   // email: { type: String, required: true },
@@ -17,8 +9,15 @@ const getuserSchema = new mongoose.Schema({
 });
 
 
+const getquestionsSchema = new mongoose.Schema({
+  id: { type: String, required: true },
+  question: { type: String, required: true },
+  options: Array,
+  correct: { type: String, required: true }
+});
 
-const addUser = mongoose.model('addUser', adduserSchema);
+
 const getUser = mongoose.model('getUser', getuserSchema);
+const questions = mongoose.model('questions', getquestionsSchema);
 
-module.exports = { addUser, getUser }
+module.exports = { getUser, questions }

@@ -1,3 +1,4 @@
+// const { response } = require("express");
 
 //References
 let timeLeft = document.querySelector(".time-left");
@@ -14,97 +15,31 @@ let questionCount;
 let scoreCount = 0;
 let count = 11;
 let countdown;
-var questionss;
+var quest;
+var quizArray;
 
 
-// async function getQuestions() {
-//   try {
-//         await fetch('/question-array')
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log(data);
-//     });
+async function getQuestions() {
+  try {
+    await fetch('http://localhost:5000/quizQuestions')
+    .then(response => response.json())
+    .then(data => {
+     quest = data;
+      // console.log(quest);
+    });
+  } catch (e) {};
 
-//  } catch (err) {}
-// }
+}
 
-// getQuestions();
+getQuestions();
+
+setTimeout(() => {
+  quizArray = quest;
+  console.log(quest); // this will log the value of quest
+  
+}, 1000);
+
 //Questions and Options array
-
-const quizArray = [
-  {
-    id: "0",
-    question: "Which is the most widely spoken language in the world?",
-    options: ["Spanish", "Mandarin", "English", "German"],
-    correct: "Mandarin",
-  },
-  {
-    id: "1",
-    question: "Which is the only continent in the world without a desert?",
-    options: ["North America", "Asia", "Africa", "Europe"],
-    correct: "Europe",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-  {
-    id: "2",
-    question: "Who invented Computer?",
-    options: ["Charles Babbage", "Henry Luce", "Henry Babbage", "Charles Luce"],
-    correct: "Charles Babbage",
-  },
-];
 
 //Restart Quiz
 restart.addEventListener("click", () => {
@@ -237,7 +172,8 @@ function initial() {
 startButton.addEventListener("click", () => {
   startScreen.classList.add("hide");
   displayContainer.classList.remove("hide");
-  initial();
+  initial()
+;
 });
 
 //hide quiz and display start screen
