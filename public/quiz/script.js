@@ -11,9 +11,9 @@ async function getQuestions() {
     });
   } catch (e) {};
 
-}
+};
 
-getQuestions();
+  getQuestions();
 
 
 //References

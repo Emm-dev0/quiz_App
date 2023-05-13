@@ -17,6 +17,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
+//fetches the question from the database ans hosts it
+app.get("/quizQuestions", async (req, res) => {
+    async function getQuestions() {
+        try {
+           const question = await questions.find({});
+            quizQuestions = question;
+        //    console.log(question);
+           
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    getQuestions();
+    console.log( quizQuestions );
+
+    res.send(await quizQuestions);
+});
+
 app.get('/login', (req, res) => {
     res.sendFile("login.html", { root : VIEWS});
 0});
@@ -65,24 +84,6 @@ app.post('/signup', (req, res) => {
 
 });
 
-//fetches the question from the database ans hosts it
-app.get("/quizQuestions", async (req, res) => {
-    async function getQuestions() {
-        try {
-           const question = await questions.find({});
-            quizQuestions = question;
-        //    console.log(question);
-           
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    getQuestions();
-    console.log( quizQuestions );
-
-    res.send(await quizQuestions);
-});
 
 app.listen(port);
 console.log("app started on port"  +" "+ `${port}`)
