@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 
 //fetches the question from the database ans hosts it
-app.get("/quizQuestions", async (req, res) => {
+app.get("/quizQuestions", async (req, res, next) => {
     async function getQuestions() {
         try {
            const question = await questions.find({});
@@ -28,12 +28,14 @@ app.get("/quizQuestions", async (req, res) => {
         } catch (err) {
             console.error(err);
         }
-    }
 
+        //added a middleware function
+    };
     getQuestions();
+    next();
+}, async function(req, res){
     console.log( quizQuestions );
-
-    res.send(await quizQuestions);
+    res.send( await quizQuestions);
 });
 
 app.get('/login', (req, res) => {
