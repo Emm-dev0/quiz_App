@@ -5,19 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="signup.css" >
+
     
     <title>img Upload</title>
 </head>
 <body>
         <div class="container">
-            <form id=" uploadForm" enctype="multipart/form-data">
-                <p>select image</p>
-                <input type="file" class="field" id="imgInput" required name="image">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" class="field" id="imgInput" name="image">
                 <button class="btn1" type="submit">Submit</button>
             </form>
         </div>
 
         <script>
+        document.addEventListener("DOMContentLoaded", () => {
             const uploadForm = document.getElementById('uploadForm');
             const imageInput = document.getElementById('imgInput');
 
@@ -29,12 +30,16 @@
 
                 try {
                     //make an http post request to the backend endpoint to upload img
-                    const response = await fetch('http://localhost:5000/upload', {
+                    const respons = await fetch('http://localhost:5000/api/upload', {
                         method: 'POST',
                         body: formData,
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                     console.log(data);
                     });
 
-                    if (response.ok) {
+                    if (respons.ok) {
                         //reset the form after successful upload
                         uploadForm.reset();
                         console.log('successful');
@@ -46,6 +51,8 @@
                     console.error(error);
                 }
             })
+
+        })
         </script>
 </body>
 </html>

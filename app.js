@@ -5,15 +5,12 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const VIEWS = path.join(__dirname, 'public')
 const mongoose = require('mongoose');
-
-// dependencies for image handling and upload
 const multer = require('multer');
-const fs = require('fs');
 const sharp = require('sharp');
-const router = express.Router();
-
+const fs = require('fs');
 const { getUser, questions, imgModel } = require("./models/model");
-require("./conn")
+require("./conn");
+// const { router } = require("./imgroute");
 var quizQuestions;
 
 //to render static files
@@ -22,9 +19,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 //for body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+// app.use('/api', router);
 
-//configure mutler to handle flle uploads
-const upload = multer({ dest: 'uploads/'});
+//configure multer to handle image upload
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/api/upload', upload.single('image'), async (req, res) => {
+    try {
+      const uploadedFile = req.file; // Access the uploaded file using req.file
+  
+      const imageBuffer = await sharp(uploadedFile.path)
+        .resize({ width: 800, height: 600 })
+        .toBuffer(); // Process and store the uploaded file as binary data
+  
+      fs.unlinkSync(uploadedFile.path); // Remove the original uploaded file
+  
+      const newImg = new imgModel({
+        image: imageBuffer,
+        imageContentType: uploadedFile.mimetype,
+      }); // Create a new document with the image data
+  
+      await newImg.save(); // Save the image to the MongoDB database
+  
+      res.json({ message: 'Image uploaded successfully' }); // Send a response back to the client
+    } catch (error) {
+      console.error(error); // Handle any errors that occur during the upload
+      res.status(500).json({ error: 'An error occurred during image upload' });
+    }
+  });
 
 
 //fetches the question from the database ans hosts it
@@ -59,39 +81,6 @@ app.get('/quiz', (req, res) => {
 app.get('/imgUpload', (req, res) => {
     res.sendFile("imgUpload.html", { root : VIEWS});
 });
-
-//route to handle the image upload
-router.post('/upload', upload.single('image'), async (req, res) => {
-    try {
-        //access the uploaded file using req.file
-        const uploadedFile = req.file;
-
-        //process and store the uploaded file as binary data
-        const imageBuffer = await sharp(uploadedFile.path)
-            .resize({ width: 800, height: 600 }).toBuffer();
-
-        //remove the originally uploaded file
-        fs.unlinkSync(uploadedFile.path);
-
-        //create a new question document with the image data
-        const newImg = new imgModel({
-            image: imageBuffer,
-            imageContentType: uploadedFile.mimetype,
-        });
-
-        //save the image to the mongodb database
-        await newImg.save();
-
-        //send a response back to the client
-        res.json({ message: 'img uploaded successfuly'});
-            
-    } catch (error) {
-        //handle any error the occurs
-        console.error(error);
-    }
-});
-
-module.exports = router;
 
 app.get('/signup', (req, res) => {
     res.sendFile("index.html", { root : VIEWS});

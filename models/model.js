@@ -5,7 +5,9 @@ const getuserSchema = new mongoose.Schema({
   // email: { type: String, required: true },
   password: { type: String, required: true },
   // age: { type: Number },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  image: { type: Buffer },
+  imageContentType: { type: String }
 });
 
 
