@@ -16,8 +16,13 @@ const getquestionsSchema = new mongoose.Schema({
   correct: { type: String, required: true }
 });
 
+const imgModelSchema = new mongoose.Schema({
+  image: { type: Buffer },
+  imageContentType: { type: String }
+});
 
 const getUser = mongoose.model('getUser', getuserSchema);
 const questions = mongoose.model('questions', getquestionsSchema);
+const imgModel = mongoose.model('imgModel', imgModelSchema);
 
-module.exports = { getUser, questions }
+module.exports = { getUser, questions, imgModel }

@@ -9,5 +9,5 @@ mongoose.connect(
         console.log('connection successful');
     }).catch((e) => {
         console.log("db not connected")
-    })
+    });
 

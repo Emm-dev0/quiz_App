@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="signup.css" >
+    
+    <title>img Upload</title>
+</head>
+<body>
+        <div class="container">
+            <form id=" uploadForm" enctype="multipart/form-data">
+                <p>select image</p>
+                <input type="file" class="field" id="imgInput" required name="image">
+                <button class="btn1" type="submit">Submit</button>
+            </form>
+        </div>
+
+        <script>
+            const uploadForm = document.getElementById('uploadForm');
+            const imageInput = document.getElementById('imgInput');
+
+            uploadForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData();
+                formData.append('image', imageInput.files[0]);
+
+                try {
+                    //make an http post request to the backend endpoint to upload img
+                    const response = await fetch('http://localhost:5000/upload', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (response.ok) {
+                        //reset the form after successful upload
+                        uploadForm.reset();
+                        console.log('successful');
+                    } else {
+                        //handle the error response
+                        console.error('image upload failed');
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            })
+        </script>
+</body>
+</html>
